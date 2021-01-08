@@ -1,4 +1,6 @@
 import L from "leaflet";
+import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
+
 
 // Following https://github.com/Leaflet/Leaflet/blob/master/PLUGIN-GUIDE.md
 (function (factory, window) {
@@ -113,13 +115,15 @@ import L from "leaflet";
 			L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
 			{
 			  minZoom: 1,
-			  maxZoom: 19,
+              maxZoom: 19,
+              edgeBufferTiles: 5,
 			}).addTo(map);
 
 			L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 			{
 			  minZoom: 1,
-			  maxZoom: 19,
+              maxZoom: 19,
+              edgeBufferTiles: 5,
 			}).addTo(this._miniMap);
 
 			var toggleFlag=0
@@ -129,13 +133,15 @@ import L from "leaflet";
 					L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 					{
 					  minZoom: 1,
-					  maxZoom: 19,
+                      maxZoom: 19,
+                      edgeBufferTiles: 5,
 					}).addTo(map);
 
  					L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
 					{
 					  minZoom: 1,
-					  maxZoom: 19,
+                      maxZoom: 19,
+                      edgeBufferTiles: 5,
 					}).addTo(this); 
 					toggleFlag=1;
 				}
@@ -143,14 +149,16 @@ import L from "leaflet";
 					L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
 					{
 					  minZoom: 1,
-					  maxZoom: 19,
+                      maxZoom: 19,
+                      edgeBufferTiles: 5,
 					}).addTo(map);
 
 					toggleFlag=0;
 					L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 					{
 					  minZoom: 1,
-					  maxZoom: 19,
+                      maxZoom: 19,
+                      edgeBufferTiles: 5,
 					}).addTo(this); 
 				}
 				
