@@ -112,14 +112,17 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 
 			//change map by click
 
-			L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+			var street;
+			var satellite;
+
+			street= L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
 			{
 			  minZoom: 1,
               maxZoom: 19,
               edgeBufferTiles: 5,
 			}).addTo(map);
 
-			L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			satellite= L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 			{
 			  minZoom: 1,
               maxZoom: 19,
@@ -130,14 +133,16 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 
 			this._miniMap.on('click', function(){
 				if(toggleFlag==0){
-					L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+					map.removeLayer(street);
+					this.removeLayer(satellite);
+					street=L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 					{
 					  minZoom: 1,
                       maxZoom: 19,
                       edgeBufferTiles: 5,
 					}).addTo(map);
 
- 					L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+					satellite=L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
 					{
 					  minZoom: 1,
                       maxZoom: 19,
@@ -146,7 +151,9 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 					toggleFlag=1;
 				}
 				else{
-					L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+					map.removeLayer(street);
+					this.removeLayer(satellite);
+					satellite=L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
 					{
 					  minZoom: 1,
                       maxZoom: 19,
@@ -154,7 +161,7 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 					}).addTo(map);
 
 					toggleFlag=0;
-					L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+					street=L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 					{
 					  minZoom: 1,
                       maxZoom: 19,
