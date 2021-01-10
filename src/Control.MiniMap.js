@@ -9,7 +9,7 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 	if (typeof define === 'function' && define.amd) {
 		define(['leaflet'], factory);
 
-	// define a Common JS module that relies on 'leaflet'
+		// define a Common JS module that relies on 'leaflet'
 	} else if (typeof exports === 'object') {
 		module.exports = factory(require('leaflet'));
 	}
@@ -40,10 +40,25 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 			height: 150,
 			collapsedWidth: 19,
 			collapsedHeight: 19,
-			aimingRectOptions: {color: '#ff7800', weight: 1, clickable: false, opacity:0, fillOpacity: 0},
-			shadowRectOptions: {color: '#000000', weight: 1, clickable: false, opacity: 0, fillOpacity: 0},
-			strings: {hideText: 'Hide MiniMap', showText: 'Show MiniMap'},
-			mapOptions: {}  // Allows definition / override of Leaflet map options.
+			aimingRectOptions: {
+				color: '#ff7800',
+				weight: 1,
+				clickable: false,
+				opacity: 0,
+				fillOpacity: 0
+			},
+			shadowRectOptions: {
+				color: '#000000',
+				weight: 1,
+				clickable: false,
+				opacity: 0,
+				fillOpacity: 0
+			},
+			strings: {
+				hideText: 'Hide MiniMap',
+				showText: 'Show MiniMap'
+			},
+			mapOptions: {} // Allows definition / override of Leaflet map options.
 		},
 
 		// layer is the map layer to be shown in the minimap
@@ -79,7 +94,7 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 				tap: false,
 				crs: map.options.crs,
 			};
-			mapOptions = L.Util.extend(this.options.mapOptions, mapOptions);  // merge with priority of the local mapOptions object.
+			mapOptions = L.Util.extend(this.options.mapOptions, mapOptions); // merge with priority of the local mapOptions object.
 
 			this._miniMap = new L.Map(this._container, mapOptions);
 
@@ -114,64 +129,105 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 
 			var street;
 			var satellite;
+			var latlng;
+			var zoomlevel;
 
-			street= L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
-			{
-			  minZoom: 1,
-              maxZoom: 19,
-              edgeBufferTiles: 5,
+			street = L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}', {
+				minZoom: 1,
+				maxZoom: 19,
+				edgeBufferTiles: 5,
 			}).addTo(map);
 
-			satellite= L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-			{
-			  minZoom: 1,
-              maxZoom: 19,
-              edgeBufferTiles: 5,
+
+			satellite = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				minZoom: 1,
+				maxZoom: 19,
+				edgeBufferTiles: 5,
 			}).addTo(this._miniMap);
 
-			var toggleFlag=0
+			///
+			map.removeLayer(street);
+			this._miniMap.removeLayer(satellite);
+			street = L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}', {
+				minZoom: 1,
+				maxZoom: 19,
+				edgeBufferTiles: 5,
+			}).addTo(this._miniMap);
 
-			this._miniMap.on('click', function(){
-				if(toggleFlag==0){
+
+			satellite = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				minZoom: 1,
+				maxZoom: 19,
+				edgeBufferTiles: 5,
+			}).addTo(map);
+			///
+			map.removeLayer(street);
+			this._miniMap.removeLayer(satellite);
+			street = L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}', {
+				minZoom: 1,
+				maxZoom: 19,
+				edgeBufferTiles: 5,
+			}).addTo(map);
+
+
+			satellite = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				minZoom: 1,
+				maxZoom: 19,
+				edgeBufferTiles: 5,
+			}).addTo(this._miniMap);
+			///
+
+			var toggleFlag = 0
+
+			this._miniMap.on('click', function () {
+				if (toggleFlag == 0) {
+
+					latlng = map.getCenter();
+					zoomlevel = map.getZoom();
+
 					map.removeLayer(street);
 					this.removeLayer(satellite);
-					street=L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-					{
-					  minZoom: 1,
-                      maxZoom: 19,
-                      edgeBufferTiles: 5,
+					street = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+						minZoom: 1,
+						maxZoom: 19,
+						edgeBufferTiles: 5,
 					}).addTo(map);
 
-					satellite=L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
-					{
-					  minZoom: 1,
-                      maxZoom: 19,
-                      edgeBufferTiles: 5,
-					}).addTo(this); 
-					toggleFlag=1;
-				}
-				else{
+					map.setView(latlng, zoomlevel);
+
+					satellite = L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}', {
+						minZoom: 1,
+						maxZoom: 19,
+						edgeBufferTiles: 5,
+					}).addTo(this);
+
+					toggleFlag = 1;
+				} else {
+
+					latlng = map.getCenter();
+					zoomlevel = map.getZoom();
+
 					map.removeLayer(street);
 					this.removeLayer(satellite);
-					satellite=L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
-					{
-					  minZoom: 1,
-                      maxZoom: 19,
-                      edgeBufferTiles: 5,
+					satellite = L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}', {
+						minZoom: 1,
+						maxZoom: 19,
+						edgeBufferTiles: 5,
 					}).addTo(map);
 
-					toggleFlag=0;
-					street=L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-					{
-					  minZoom: 1,
-                      maxZoom: 19,
-                      edgeBufferTiles: 5,
-					}).addTo(this); 
-				}
-				
+					map.setView(latlng, zoomlevel);
 
+					toggleFlag = 0;
+					street = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+						minZoom: 1,
+						maxZoom: 19,
+						edgeBufferTiles: 5,
+					}).addTo(this);
 				}
-			);
+
+
+			});
 
 			return this._container;
 		},
@@ -203,7 +259,7 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 		_addToggleButton: function () {
 			this._toggleDisplayButton = this.options.toggleDisplay ? this._createButton(
 				'', this._toggleButtonInitialTitleText(), ('leaflet-control-minimap-toggle-display leaflet-control-minimap-toggle-display-' +
-				this.options.position), this._container, this._toggleDisplayButtonClicked, this) : undefined;
+					this.options.position), this._container, this._toggleDisplayButtonClicked, this) : undefined;
 
 			this._toggleDisplayButton.style.width = this.options.collapsedWidth + 'px';
 			this._toggleDisplayButton.style.height = this.options.collapsedHeight + 'px';
@@ -274,7 +330,7 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 				this._container.style.width = this.options.width + 'px';
 				this._container.style.height = this.options.height + 'px';
 				this._toggleDisplayButton.className = this._toggleDisplayButton.className
-					.replace('minimized-'	+ this.options.position, '');
+					.replace('minimized-' + this.options.position, '');
 				this._toggleDisplayButton.title = this.options.strings.hideText;
 			} else {
 				this._container.style.display = 'block';
@@ -306,7 +362,10 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 				var lastAimingRect = this._aimingRect.getBounds();
 				var sw = this._miniMap.latLngToContainerPoint(lastAimingRect.getSouthWest());
 				var ne = this._miniMap.latLngToContainerPoint(lastAimingRect.getNorthEast());
-				this._lastAimingRectPosition = {sw: sw, ne: ne};
+				this._lastAimingRectPosition = {
+					sw: sw,
+					ne: ne
+				};
 			}
 		},
 
@@ -314,7 +373,10 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 			if (!this.options.centerFixed) {
 				if (!this._mainMapMoving && this._lastAimingRectPosition) {
 					this._shadowRect.setBounds(new L.LatLngBounds(this._miniMap.containerPointToLatLng(this._lastAimingRectPosition.sw), this._miniMap.containerPointToLatLng(this._lastAimingRectPosition.ne)));
-					this._shadowRect.setStyle({opacity: 1, fillOpacity: 0.3});
+					this._shadowRect.setStyle({
+						opacity: 1,
+						fillOpacity: 0.3
+					});
 				}
 			}
 		},
@@ -323,7 +385,10 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 			if (!this._mainMapMoving) {
 				this._miniMapMoving = true;
 				this._mainMap.setView(this._miniMap.getCenter(), this._decideZoom(false));
-				this._shadowRect.setStyle({opacity: 0, fillOpacity: 0});
+				this._shadowRect.setStyle({
+					opacity: 0,
+					fillOpacity: 0
+				});
 			} else {
 				this._mainMapMoving = false;
 			}
@@ -405,7 +470,9 @@ import "../../leaflet-edgebuffer/src/leaflet.edgebuffer.js"
 
 		_fireToggleEvents: function () {
 			L.DomEvent.off(this._container, 'transitionend', this._fireToggleEvents, this);
-			var data = { minimized: this._minimized };
+			var data = {
+				minimized: this._minimized
+			};
 			this.fire(this._minimized ? 'minimize' : 'restore', data);
 			this.fire('toggle', data);
 		}
